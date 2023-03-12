@@ -79,5 +79,4 @@ jobs:
       - name: ⚡ Run vitest
         run: npm run test -- --coverage
   deploy-to-staging:
-    - if: github.event.review.state == 'approved'
-      run: npm run typecheck --if-present
+    run: npm run typecheck --if-present
