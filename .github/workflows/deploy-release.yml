@@ -16,8 +16,6 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
-      - name: Install dependencies
-        run: npm install
       - name: Run type checker
         run: npm run type-check
       - name: Run linter
@@ -28,7 +26,5 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
-      - name: Install dependencies
-        run: npm install
       - name: Run type checker
         run: npm run type-check
