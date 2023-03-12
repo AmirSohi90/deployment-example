@@ -58,7 +58,7 @@ jobs:
 
   deploy-to-staging:
     name: deploy-to-staging
-    if: github.event.review.state == 'approved'
+    # if: github.event.review.state == 'approved'
     needs: [test, typecheck]
     timeout-minutes: 10
     runs-on: ubuntu-latest
