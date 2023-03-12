@@ -61,7 +61,9 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+      - if: steps.changes.outputs.mypath == 'true' && github.event.review.state == 'approved'
+        run:
+          - name: ⎔ Setup node
+            uses: actions/setup-node@v3
+            with:
+              node-version: 16
