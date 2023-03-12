@@ -16,12 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: npm install
       - name: Run type checker
         run: npm run type-check
       - name: Run linter
         run: npm run lint
+
+  deploy-to-staging:
+    needs: setup
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run type checker
+      run: npm run type-check
