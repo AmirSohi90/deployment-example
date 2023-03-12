@@ -56,12 +56,22 @@ jobs:
       - name: ⚡ Run Test
         run: npm run test -- --coverage
 
-  deploy-to-staging:
+  deploying-to-staging:
     name: deploy-to-staging
     # if: github.event.review.state == 'approved'
     needs: [test, typecheck]
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    steps:
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+  deploy-qa:
+    runs-on: "ubuntu-latest"
+    environment: "qa"
+    needs: [deploying-to-staging]
     steps:
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
