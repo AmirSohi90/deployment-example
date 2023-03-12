@@ -13,8 +13,6 @@ jobs:
   setup:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    outputs:
-      non-contract-test-batches: ${{ steps['batch-non-contract-tests'].outputs['batches'] }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
