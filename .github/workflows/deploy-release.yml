@@ -77,3 +77,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+
+  approved-by-qa:
+    runs-on: "ubuntu-latest"
+    environment: "approved-by-qa"
+    needs: [deploy-qa]
