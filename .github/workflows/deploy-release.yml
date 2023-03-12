@@ -1,5 +1,7 @@
 name: Release Branch
-on: [pull_request]
+on:
+  pull_request:
+    branches: [release-branch]
 
 permissions:
   actions: write
@@ -13,17 +15,24 @@ jobs:
   setup:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    outputs:
-      non-contract-test-batches: ${{ steps['batch-non-contract-tests'].outputs['batches'] }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: npm install
       - name: Run type checker
         run: npm run type-check
       - name: Run linter
         run: npm run lint
+
+  deploy-to-staging:
+    needs: setup
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Run type checker
+        run: npm run type-check
