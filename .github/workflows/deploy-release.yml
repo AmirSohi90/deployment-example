@@ -79,4 +79,7 @@ jobs:
       - name: ⚡ Run vitest
         run: npm run test -- --coverage
   deploy-to-staging:
-    run: npm run typecheck --if-present
+    name: Deploy to Staging
+    steps:
+      - name: Deploy to staging mock
+      run: npm run typecheck --if-present
