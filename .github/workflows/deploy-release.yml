@@ -1,5 +1,7 @@
 name: Release Branch
-on: [pull_request]
+on:
+  pull_request:
+    branches: [release-branch]
 
 permissions:
   actions: write
