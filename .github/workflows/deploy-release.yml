@@ -61,8 +61,7 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
-      run:
-        - name: ⎔ Setup node
-          uses: actions/setup-node@v3
-          with:
-            node-version: 16
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
