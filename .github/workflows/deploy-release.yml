@@ -61,7 +61,7 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
-      - if: steps.changes.outputs.mypath == 'true' && github.event.review.state == 'approved'
+      - if: github.event.review.state == 'approved'
         run:
           - name: ⎔ Setup node
             uses: actions/setup-node@v3
