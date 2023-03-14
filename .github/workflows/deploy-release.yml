@@ -1,7 +1,5 @@
 name: Release Branch
-on:
-  pull_request:
-    branches: [release-branch]
+on: [pull_request]
 
 permissions:
   actions: write
@@ -12,23 +10,56 @@ defaults:
     shell: bash
 
 jobs:
-  setup:
-    timeout-minutes: 10
+  typecheck:
+    name: ʦ TypeScript
     runs-on: ubuntu-latest
     steps:
       - name: ⎔ Setup node
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Install dependencies
-        run: npm install
-      - name: Run type checker
-        run: npm run type-check
-      - name: Run linter
-        run: npm run lint
 
-  deploy-to-staging:
-    needs: setup
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.10.0
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 📥 Download deps
+        uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: false
+
+      - name: 🔎 Type check
+        run: npm run typecheck --if-present
+
+  test:
+    name: ⚡ Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.10.0
+
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 📥 Download deps
+        uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: false
+
+      - name: ⚡ Run Test
+        run: npm run test -- --coverage
+
+  deploying-to-staging:
+    name: deploy-to-staging
+    # if: github.event.review.state == 'approved'
+    needs: [test, typecheck]
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +67,23 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Install dependencies
-        run: npm install
-      - name: Run type checker
-        run: npm run type-check
+
+  deploy-qa:
+    runs-on: "ubuntu-latest"
+    environment: "qa"
+    needs: [deploying-to-staging]
+    steps:
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+  approved-by-qa:
+    runs-on: "ubuntu-latest"
+    environment: approved-by-qa
+    needs: [deploy-qa]
+    steps:
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
